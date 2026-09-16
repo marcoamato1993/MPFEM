@@ -1,0 +1,46 @@
+# SOLVER
+GeneralStatic
+
+# DOMAIN
+Plane2D
+
+# NODES
+Node 1 coords 3 0.0 0.0 0.0
+Node 2 coords 3 1.0 0.0 0.0
+Node 3 coords 3 0.0 1.0 0.0
+
+# ELEMENTS
+Truss 1 nodes 2 1 2
+Truss 2 nodes 2 2 3
+Truss 3 nodes 2 1 3
+
+# MATERIALS
+LinearElastic 1 E 210e9 nu 0.3 set 4
+LinearElastic 2 E 210e9 nu 0.3 set 5
+LinearElastic 3 E 210e9 nu 0.3 set 6
+
+# CROSSSECTIONS
+GeneralCS 1 A 1.00e-4 Ix 8.33e-10 set 4
+GeneralCS 2 A 1.00e-4 Ix 8.33e-10 set 5
+GeneralCS 3 A 1.00e-4 Ix 8.33e-10 set 6
+
+# BOUNDARYCONDITIONS
+BoundaryCondition 1 PieceWiseLinearFunction 1 dofs 2 1 2 -1 1 set 1
+BoundaryCondition 2 PieceWiseLinearFunction 1 dofs 1 1 0 set 3
+
+# FORCES
+Force 1 PieceWiseLinearFunction 2 dofs 1 2 -1000 set 3
+Force 2 PieceWiseLinearFunction 3 dofs 1 1 1000 set 2
+
+# SETS
+Set 1 nodes 1 1
+Set 2 nodes 1 2
+Set 3 nodes 1 3
+Set 4 elements 1 1
+Set 5 elements 1 2
+Set 6 elements 1 3
+
+# LOADTIMEFUNCTIONS
+PieceWiseLinearFunction 1 steps 1 1 values 1 1 intervals 100
+PieceWiseLinearFunction 2 steps 2 0.5 1 values 2 1 1 intervals 100
+PieceWiseLinearFunction 3 steps 2 0.5 1 values 2 0 1 intervals 100
