@@ -75,7 +75,7 @@ function model = readInput(inputFileDirectory,inputFileName);
                 intervals = str2double(tokens{3});
 
                 model.solver.solverType = solverType;
-                model.solver.(solverType).intervals = intervals;
+                model.solver.intervals = intervals;
 
             case '# DOMAIN'
 
@@ -227,6 +227,7 @@ function model = readInput(inputFileDirectory,inputFileName);
                 model.sets(setID).type = setType;
                 model.sets(setID).ids = entityIDs;
 
+
             case '# LOADTIMEFUNCTIONS'
 
                 tokens = split(line);
@@ -237,13 +238,21 @@ function model = readInput(inputFileDirectory,inputFileName);
 
                 nsteps = str2double(tokens{4});
 
-                tvalue = str2double(tokens(5 : 4+nsteps));
+                pointsIdx = find(strcmp(tokens, 'points'), 1);
+                
+                npoints = str2double(tokens{pointsIdx + 1});
 
-                ftvalue = str2double(tokens(7 + nsteps : 6 + 2*nsteps));
+                tvalue = str2double(tokens(pointsIdx + 2 : pointsIdx + 1 + npoints));
 
-                model.loadtimefunctions(ltfID).type = ltfType;
-                model.loadtimefunctions(ltfID).nsteps = nsteps;
-                model.loadtimefunctions(ltfID).tvalue = tvalue;
+                valuesIdx = find(strcmp(tokens, 'values'), 1);
+                
+                nvalues = str2double(tokens{valuesIdx + 1});
+                
+                ftvalue = str2double(tokens(valuesIdx + 2 : valuesIdx + 1 + nvalues));
+
+                model.loadtimefunctions(ltfID).type    = ltfType;
+                model.loadtimefunctions(ltfID).nsteps  = nsteps;
+                model.loadtimefunctions(ltfID).tvalue  = tvalue;
                 model.loadtimefunctions(ltfID).ftvalue = ftvalue;
 
             otherwise

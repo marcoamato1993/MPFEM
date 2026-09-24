@@ -1,20 +1,18 @@
-function [tfun, ftfun] = PieceWiseLinearFunction(model, ltfID)
+function ftvalues = PieceWiseLinearFunction(model, ltfID, tvalues)
     nsteps = model.loadtimefunctions(ltfID).nsteps;
-    nintervals = model.loadtimefunctions(ltfID).nIntervals;
-    nintervalspersteps = nintervals/nsteps;
+    t = model.loadtimefunctions(ltfID).tvalue;
+    ft = model.loadtimefunctions(ltfID).ftvalue;
     for i = 1:nsteps
-        tf(1) = 0;
-        fti(1) = 0;
-        tf(i+1) = model.loadtimefunctions(ltfID).tvalue(i);
-        ftf(i+1) = model.loadtimefunctions(ltfID).ftvalue(i);
+        m(i) = (ft(i+1)-ft(i))/(t(i+1)-t(i));
+        q(i) = ft(i) - t(i)*(ft(i+1)-ft(i))/(t(i+1)-t(i));
     end
-    tfun = zeros(nsteps,nintervalspersteps);
-    ftfun = zeros(nsteps,nintervalspersteps);
-    for i = 1:nsteps
-        tfun(i,:) = linspace(tf(i),tf(i+1),nintervalspersteps);
-        ftfun(i,:) = linspace(ftf(i),ftf(i+1),nintervalspersteps);
+    for i = 1:length(tvalues)
+        for j = 1:nsteps 
+            if tvalues(i) >= t(j) && tvalues(i) <= t(j+1)
+                ftvalues(i) = m(j)*tvalues(i) + q(j);
+                break
+            end
+        end
     end
-    tfun = [tfun(1,:), reshape(tfun(2:end, 2:end).', 1, [])];
-    ftfun = [ftfun(1,:), reshape(ftfun(2:end, 2:end).', 1, [])];
 end
 
