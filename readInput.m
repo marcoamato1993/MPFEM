@@ -67,8 +67,15 @@ function model = readInput(inputFileDirectory,inputFileName);
         switch section
 
             case '# SOLVER'
+                
+                tokens = split(line);
 
-                model.solver = string(strtrim(line));
+                solverType = tokens{1};
+
+                intervals = str2double(tokens{3});
+
+                model.solver.solverType = solverType;
+                model.solver.(solverType).intervals = intervals;
 
             case '# DOMAIN'
 
@@ -234,13 +241,10 @@ function model = readInput(inputFileDirectory,inputFileName);
 
                 ftvalue = str2double(tokens(7 + nsteps : 6 + 2*nsteps));
 
-                nIntervals = str2double(tokens{8 + 2*nsteps});
-
                 model.loadtimefunctions(ltfID).type = ltfType;
                 model.loadtimefunctions(ltfID).nsteps = nsteps;
                 model.loadtimefunctions(ltfID).tvalue = tvalue;
                 model.loadtimefunctions(ltfID).ftvalue = ftvalue;
-                model.loadtimefunctions(ltfID).nIntervals = nIntervals;
 
             otherwise
 
