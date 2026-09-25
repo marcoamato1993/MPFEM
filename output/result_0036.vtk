@@ -1,0 +1,26 @@
+# vtk DataFile Version 3.0
+MPFEM result at time 0.36
+ASCII
+DATASET UNSTRUCTURED_GRID
+POINTS 3 double
+0 0 0
+1 0 0
+0 1 0
+CELLS 3 9
+2 0 1
+2 1 2
+2 0 2
+CELL_TYPES 3
+3
+3
+3
+POINT_DATA 3
+VECTORS displacement double
+0.18 0.18 0
+0.18 0.3599999999999999 0
+0 0.18 0
+SCALARS displacement_magnitude double 1
+LOOKUP_TABLE default
+0.2545584412271571
+0.4024922359499621
+0.18

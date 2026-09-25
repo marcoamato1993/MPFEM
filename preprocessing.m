@@ -50,6 +50,8 @@ function model = preprocessing(model)
     %=========================================================
     %  GLOBAL BOUNDARY CONDITIONS
     %=========================================================
+    
+    tvalues = timediscretizer(model);
 
     model.constrainedDofs = [];
     model.constrainedValues = [];
@@ -82,8 +84,13 @@ function model = preprocessing(model)
         model.boundaryConditions(bcID).globalDofs = globalDofs;
         model.boundaryConditions(bcID).globalValues = globalValues;
 
+        ltfID = model.boundaryConditions(bcID).loadTimeFunctionID;
+        ltftype = model.loadtimefunctions(ltfID).type;
+        ftfun = feval(ltftype, model, ltfID, tvalues);
+        model.boundaryConditions(bcID).globalValues = model.boundaryConditions(bcID).globalValues*ftfun;
+
         model.constrainedDofs = [model.constrainedDofs, globalDofs];
-        model.constrainedValues = [model.constrainedValues, transpose(globalValues)];
+        model.constrainedValues = [model.constrainedValues, transpose(model.boundaryConditions(bcID).globalValues)];
 
     end
 
@@ -93,7 +100,7 @@ function model = preprocessing(model)
     %  GLOBAL EXTERNAL FORCES
     %=========================================================
 
-    model.f = zeros(model.nDofs, 1);
+    model.f = zeros(model.nDofs, model.solver.intervals);
 
     for forceID = 1:numel(model.forces)
 
@@ -120,7 +127,12 @@ function model = preprocessing(model)
         model.forces(forceID).globalDofs = globalDofs;
         model.forces(forceID).globalValues = globalValues;
 
-        model.f(globalDofs) = model.f(globalDofs) + globalValues.';
+        ltfID = model.forces(forceID).loadTimeFunctionID;
+        ltftype = model.loadtimefunctions(ltfID).type;
+        ftfun = feval(ltftype, model, ltfID, tvalues);
+        model.forces(forceID).globalValues = model.forces(forceID).globalValues*ftfun;
+
+        model.f(globalDofs,:) = model.f(globalDofs) + model.forces(forceID).globalValues;
     end
 
 end
