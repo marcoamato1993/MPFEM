@@ -11,11 +11,13 @@
 
 cleanmemory();
 
-inputFileDirectory = 'C:\Users\amato\Documents\GitHub\MPFEM\inputfiles';
+inputFileDirectory = '/home/marco/Documents/MPFEM/inputfiles';
+outputFileDirectory = '/home/marco/Documents/MPFEM/outputfiles';
 
-inputFileName = 'ret2d.in';
+inputFileName = 'ret2d';
+outputFileName = 'ret2d';
 
-model = readInput(inputFileDirectory,inputFileName);
+model = readInput(inputFileDirectory, inputFileName);
 
 model = preprocessing(model);
 
@@ -23,4 +25,6 @@ model = stiffness(model);
 
 model = solverSystem(model);
 
-writeVTK(model, 'output');
+exporterOutput(model, outputFileDirectory, outputFileName);
+
+disp('Analysis Finished')

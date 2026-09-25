@@ -1,5 +1,6 @@
-function model = readInput(inputFileDirectory,inputFileName);
-
+function model = readInput(inputFileDirectory, inputFileName);
+    
+    inputFileName = [inputFileName '.in'];
     filepath = fullfile(inputFileDirectory, inputFileName);
     
     %=========================================================

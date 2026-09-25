@@ -14,7 +14,7 @@ function model = GeneralStatic(model)
     Kfc = K(freeDofs, constrainedDofs);
     
     for i = 1:model.solver.intervals
-        rhs = f(freeDofs)' - Kfc * u(constrainedDofs,i);
+        rhs = f(freeDofs,i) - Kfc * u(constrainedDofs,i);
     
         u(freeDofs,i) = Kff \ rhs;
     
